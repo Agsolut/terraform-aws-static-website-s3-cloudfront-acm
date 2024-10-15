@@ -41,7 +41,7 @@ resource "aws_acm_certificate_validation" "this" {
 resource "aws_route53_record" "www_domain_name" {
   type    = "CNAME"
   zone_id = data.aws_route53_zone.this.zone_id
-  name    = "www.${var.domain_name}"
+  name    = var.domain_name
   records = [var.domain_name]
   ttl     = "300"
 }

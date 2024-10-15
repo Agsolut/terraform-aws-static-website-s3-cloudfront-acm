@@ -8,7 +8,7 @@ resource "aws_cloudfront_distribution" "this" {
 
   aliases = [
     var.domain_name,
-    "www.${var.domain_name}"
+    "${var.domain_name}"
   ]
 
   enabled             = true

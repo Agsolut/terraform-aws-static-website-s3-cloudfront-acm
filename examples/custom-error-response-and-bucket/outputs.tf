@@ -20,5 +20,5 @@ output "acm_certificate_id" {
 }
 
 output "website_url" {
-  value = "www.${var.domain_name}"
+  value = var.domain_name
 }

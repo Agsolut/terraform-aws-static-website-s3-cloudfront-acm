@@ -15,7 +15,7 @@ variable "tags" {
   description = "Provider default tags, applied to all resources"
   default = {
     managed_by_terraform = true
-    terraform_module     = "joshuamkite/static-website-s3-cloudfront-acm/aws"
+    terraform_module     = "agsolut/static-website-s3-cloudfront-acm/aws"
   }
 }
 

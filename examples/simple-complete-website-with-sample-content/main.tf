@@ -24,7 +24,7 @@ variable "tags" {
   description = "Provider default tags, applied to all resources"
   default = {
     managed_by_terraform = true
-    terraform_module     = "joshuamkite/static-website-s3-cloudfront-acm/aws"
+    terraform_module     = "agsolut/static-website-s3-cloudfront-acm/aws"
   }
 }
 
@@ -75,5 +75,5 @@ output "acm_certificate_id" {
 }
 
 output "website_url" {
-  value = "www.${var.domain_name}"
+  value = var.domain_name
 }

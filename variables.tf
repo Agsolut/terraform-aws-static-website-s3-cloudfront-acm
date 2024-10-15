@@ -3,6 +3,12 @@ variable "domain_name" {
   description = "Domain name for website, used for all resources"
 }
 
+
+variable "route_53_zone_id" {
+  type        = string
+  description = "Route 53 zone id for domain"
+}
+
 variable "cloudfront_price_class" {
   type        = string
   default     = "PriceClass_100" # Only US,Canada,Europe

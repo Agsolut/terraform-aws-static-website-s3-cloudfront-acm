@@ -6,10 +6,10 @@ resource "aws_cloudfront_distribution" "this" {
     origin_access_control_id = aws_cloudfront_origin_access_control.this.id
   }
 
-  aliases = [
-    var.domain_name,
-    "${var.domain_name}"
-  ]
+  aliases = concat(
+    [var.domain_name],
+    can(regex("^[^.]+\\.[^.]+$", var.domain_name)) ? ["www.${var.domain_name}"] : []
+  )
 
   enabled             = true
   is_ipv6_enabled     = true

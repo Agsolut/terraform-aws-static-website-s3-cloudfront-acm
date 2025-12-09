@@ -79,12 +79,11 @@ resource "aws_cloudfront_distribution" "this" {
     #
     # │ Error: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
     # │       status code: 400, request id: 281f6901-fe5b-472b-a357-d918449f7b60
-    # │ 
+    # │
     # │   with module.static-website-s3-cloudfront-acm.aws_cloudfront_distribution.this,
     # │   on ../../cloudfront.tf line 1, in resource "aws_cloudfront_distribution" "this":
     # │    1: resource "aws_cloudfront_distribution" "this" {
-    aws_acm_certificate.this,
-    aws_acm_certificate_validation.this
+    aws_acm_certificate.this
   ]
 }
 

@@ -4,9 +4,16 @@ variable "domain_name" {
 }
 
 
+variable "manage_route53" {
+  type        = bool
+  default     = true
+  description = "Whether to manage Route 53 records. Set to false if using external DNS provider."
+}
+
 variable "route_53_zone_id" {
   type        = string
-  description = "Route 53 zone id for domain"
+  default     = ""
+  description = "Route 53 zone id for domain. Required when manage_route53 is true."
 }
 
 variable "cloudfront_price_class" {

@@ -28,6 +28,14 @@ resource "aws_cloudfront_distribution" "this" {
 
     target_origin_id = local.s3_origin_id
 
+    dynamic "function_association" {
+      for_each = var.cloudfront_function_associations
+      content {
+        event_type   = function_association.value.event_type
+        function_arn = function_association.value.function_arn
+      }
+    }
+
     forwarded_values {
       query_string = false
 

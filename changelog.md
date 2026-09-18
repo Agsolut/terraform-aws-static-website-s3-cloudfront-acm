@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.5
+
+- New optional input `cloudfront_function_associations` attaches CloudFront
+  Functions to the default cache behaviour. A private S3 origin serves objects
+  by exact key and `cloudfront_default_root_object` only resolves `/`, so a
+  multi-page static export needs a viewer-request function to rewrite
+  directory URLs (`/fr/legal/` -> `/fr/legal/index.html`). Defaults to `[]`,
+  so existing configurations plan unchanged.
+
 ## 2.2
 
 - Remove `aws_s3_bucket_acl` since [use is now deprecated](https://aws.amazon.com/about-aws/whats-new/2023/04/amazon-s3-security-best-practices-buckets-default/#:~:text=Amazon%20S3%20now%20applies%20two%20new%20default%20bucket%20security%20settings,applied%20to%20all%20AWS%20Regions.)

@@ -101,3 +101,32 @@ variable "cloudfront_custom_error_responses" {
     }
   ]
 }
+
+# A private S3 origin (which OAC requires) serves objects by exact key, and
+# `cloudfront_default_root_object` only resolves `/`. A multi-page static
+# export therefore needs a viewer-request function to map directory URLs like
+# `/fr/legal/` onto `/fr/legal/index.html`. Defaults to none, so distributions
+# that do not need one are unchanged.
+variable "cloudfront_function_associations" {
+  type = list(object({
+    event_type   = string
+    function_arn = string
+  }))
+  description = "CloudFront Functions to attach to the default cache behaviour. At most one per event type."
+  default     = []
+
+  validation {
+    condition = alltrue([
+      for a in var.cloudfront_function_associations :
+      contains(["viewer-request", "viewer-response"], a.event_type)
+    ])
+    error_message = "event_type must be either 'viewer-request' or 'viewer-response'."
+  }
+
+  validation {
+    condition = length(distinct([
+      for a in var.cloudfront_function_associations : a.event_type
+    ])) == length(var.cloudfront_function_associations)
+    error_message = "CloudFront allows at most one function per event type."
+  }
+}

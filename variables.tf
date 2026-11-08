@@ -130,3 +130,41 @@ variable "cloudfront_function_associations" {
     error_message = "CloudFront allows at most one function per event type."
   }
 }
+
+# Extra origins and path-based cache behaviours, e.g. routing `/api/*` on the same
+# domain to an API Gateway. Without these, anything added to the distribution by
+# hand is removed on the next apply. Both default to `[]`, so existing
+# configurations plan unchanged.
+variable "additional_origins" {
+  type = list(object({
+    origin_id                = string
+    domain_name              = string
+    origin_path              = optional(string, "")
+    http_port                = optional(number, 80)
+    https_port               = optional(number, 443)
+    origin_protocol_policy   = optional(string, "https-only")
+    origin_ssl_protocols     = optional(list(string), ["TLSv1.2"])
+    origin_read_timeout      = optional(number, 30)
+    origin_keepalive_timeout = optional(number, 5)
+    connection_attempts      = optional(number, 3)
+    connection_timeout       = optional(number, 10)
+  }))
+  description = "Additional custom (non-S3) origins, e.g. an API Gateway. Referenced from ordered_cache_behaviors by origin_id."
+  default     = []
+}
+
+variable "ordered_cache_behaviors" {
+  type = list(object({
+    path_pattern               = string
+    target_origin_id           = string
+    allowed_methods            = list(string)
+    cached_methods             = list(string)
+    viewer_protocol_policy     = optional(string, "redirect-to-https")
+    compress                   = optional(bool, true)
+    cache_policy_id            = string
+    origin_request_policy_id   = optional(string)
+    response_headers_policy_id = optional(string)
+  }))
+  description = "Path-based cache behaviours evaluated before the default (S3) behaviour, in list order. Uses cache policies (no legacy forwarded_values)."
+  default     = []
+}

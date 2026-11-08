@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.6
+
+- New optional inputs `additional_origins` and `ordered_cache_behaviors` add
+  custom origins and path-based cache behaviours (e.g. `/current/*` routed to an
+  API Gateway on the same domain). Previously such routes had to be added by
+  hand and were removed by the next apply. Both default to `[]`, so existing
+  configurations plan unchanged.
+- `required_version` raised to `>= 1.3.0` (optional object attributes).
+
 ## 2.5
 
 - New optional input `cloudfront_function_associations` attaches CloudFront

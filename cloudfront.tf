@@ -6,6 +6,26 @@ resource "aws_cloudfront_distribution" "this" {
     origin_access_control_id = aws_cloudfront_origin_access_control.this.id
   }
 
+  dynamic "origin" {
+    for_each = var.additional_origins
+    content {
+      domain_name         = origin.value.domain_name
+      origin_id           = origin.value.origin_id
+      origin_path         = origin.value.origin_path
+      connection_attempts = origin.value.connection_attempts
+      connection_timeout  = origin.value.connection_timeout
+
+      custom_origin_config {
+        http_port                = origin.value.http_port
+        https_port               = origin.value.https_port
+        origin_protocol_policy   = origin.value.origin_protocol_policy
+        origin_ssl_protocols     = origin.value.origin_ssl_protocols
+        origin_read_timeout      = origin.value.origin_read_timeout
+        origin_keepalive_timeout = origin.value.origin_keepalive_timeout
+      }
+    }
+  }
+
   aliases = concat(
     [var.domain_name],
     can(regex("^[^.]+\\.[^.]+$", var.domain_name)) ? ["www.${var.domain_name}"] : []
@@ -50,6 +70,21 @@ resource "aws_cloudfront_distribution" "this" {
     min_ttl     = var.cloudfront_min_ttl
     default_ttl = var.cloudfront_default_ttl
     max_ttl     = var.cloudfront_max_ttl
+  }
+
+  dynamic "ordered_cache_behavior" {
+    for_each = var.ordered_cache_behaviors
+    content {
+      path_pattern               = ordered_cache_behavior.value.path_pattern
+      target_origin_id           = ordered_cache_behavior.value.target_origin_id
+      allowed_methods            = ordered_cache_behavior.value.allowed_methods
+      cached_methods             = ordered_cache_behavior.value.cached_methods
+      viewer_protocol_policy     = ordered_cache_behavior.value.viewer_protocol_policy
+      compress                   = ordered_cache_behavior.value.compress
+      cache_policy_id            = ordered_cache_behavior.value.cache_policy_id
+      origin_request_policy_id   = ordered_cache_behavior.value.origin_request_policy_id
+      response_headers_policy_id = ordered_cache_behavior.value.response_headers_policy_id
+    }
   }
 
   price_class = var.cloudfront_price_class
